@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1574070548 source:/home/avanti/Desktop/ADS/ADS_project/main.cpp
+	<iostream>
+	<fstream>
+	"Building.h"
+	"MinHeap.h"
+	"RBTree.h"
+
+1574047608 source:/home/avanti/Desktop/ADS/ADS_project/src/Building.cpp
+	"Building.h"
+	<iostream>
+
+1574036302 /home/avanti/Desktop/ADS/ADS_project/include/Building.h
+
+1574017213 source:/home/avanti/Desktop/ADS/ADS_project/src/commads.cpp
+	"commads.h"
+
+1574020430 /home/avanti/Desktop/ADS/ADS_project/include/commads.h
+
+1574033754 source:/home/avanti/Desktop/ADS/ADS_project/src/MinHeap.cpp
+	"MinHeap.h"
+	<iostream>
+
+1574044356 /home/avanti/Desktop/ADS/ADS_project/include/MinHeap.h
+	"Building.h"
+	<vector>
+
+1574070460 source:/home/avanti/Desktop/ADS/ADS_project/src/RBTree.cpp
+	"RBTree.h"
+	"Building.h"
+	<stddef.h>
+	<queue>
+	<iostream>
+
+1574070490 /home/avanti/Desktop/ADS/ADS_project/include/RBTree.h
+	"Building.h"
+
