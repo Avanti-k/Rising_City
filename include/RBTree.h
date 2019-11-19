@@ -53,6 +53,7 @@ class RBTree
         void RBTree_insert(RBNode * node);
         RBNode* BSTInsert(RBNode* root, RBNode *node);
         int compare_building_num(RBNode * r1, RBNode * r2);
+        static int compare_executed_time(RBNode * r1, RBNode * r2);
         void levelOrderHelper(RBNode *root);
         void inorderHelper(RBNode *root);
 

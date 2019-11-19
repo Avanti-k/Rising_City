@@ -29,50 +29,219 @@ int input_read()
 int main()
 {
     cout << "Hello world!" << endl;
-    MinHeap mh;
+    MinHeap MH;
     RBTree RBT;
-    Building b(7,30);
-    Building b1 (6,10);
-    Building b2 (5,40);
-    Building b3 (4,20);
-    Building b4 (3,50);
-    Building b5 (2,50);
-    Building b6 (1,50);
+    Building b(7,30, 7);
+    Building b1 (6,10 ,6);
+    Building b2 (5,40, 5);
+    Building b3 (4,20,4);
+    Building b4 (3,50,3);
+    Building b5 (2,50,2);
+    Building b6 (1,50,1);
 
 
     RBNode r(&b);
     RBT.RBTree_insert(&r);
+    MH.insert_new(&r);
 
-     RBNode r1(&b1);
+    //MH.print_min_heap();
+
+    RBNode r1(&b1);
     RBT.RBTree_insert(&r1);
+    MH.insert_new(&r1);
+    //MH.print_min_heap();
 
-     RBNode r2(&b2);
+
+    RBNode r2(&b2);
     RBT.RBTree_insert(&r2);
+    MH.insert_new(&r2);
+    //MH.print_min_heap();
 
-     RBNode r3(&b3);
+
+    RBNode r3(&b3);
     RBT.RBTree_insert(&r3);
+    MH.insert_new(&r3);
+    //MH.print_min_heap();
 
-     RBNode r4(&b4);
+
+    RBNode r4(&b4);
     RBT.RBTree_insert(&r4);
+    MH.insert_new(&r4);
+    //MH.print_min_heap();
+
 
     RBNode r5(&b5);
     RBT.RBTree_insert(&r5);
+    MH.insert_new(&r5);
+    //MH.print_min_heap();
+
 
     RBNode r6(&b6);
     RBT.RBTree_insert(&r6);
+    MH.insert_new(&r6);
 
+    MH.print_min_heap();
+    if(RBT.RBRoot != NULL)
+    {
     cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
-    cout<<"\nPrinting tree in order"<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
     RBT.inorderHelper(RBT.RBRoot);
-    cout<<"\nLevel order"<<endl;
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
     RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+    }
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+    RBNode * min_node = MH.remove_min();
+    cout<<"1) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+}
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+    min_node = MH.remove_min();
+    cout<<"2) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+    }
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
 
 
-    RBT.deleteByVal(4);
-    cout<<"\nPrinting after DELETE tree in order"<<endl;
+    min_node = MH.remove_min();
+    cout<<"3) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
     RBT.inorderHelper(RBT.RBRoot);
-    cout<<"\nLevel order"<<endl;
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
     RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+}
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+    min_node = MH.remove_min();
+    cout<<"4) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+}
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+
+    min_node = MH.remove_min();
+    cout<<"5) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+}
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+
+    min_node = MH.remove_min();
+    cout<<"6) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+    }
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+    min_node = MH.remove_min();
+    cout<<"7) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
+    MH.print_min_heap();
+    RBT.deleteNode(min_node);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+    }
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+/*
+    //RBT.deleteByVal(4);
+    //RBT.deleteNode(&r3);
+    RBNode * remove_ptr = MH.remove_min();
+    RBT.deleteNode(remove_ptr);
+    cout<<" !! AFTER REMOVE MIN 1!!"<<endl;
+    MH.print_min_heap();
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+
+
+
+    //RBT.deleteByVal(2);
+    //RBT.deleteNode(&r5);
+    remove_ptr = MH.remove_min();
+    RBT.deleteNode(remove_ptr);
+    cout<<" !! AFTER REMOVE MIN 2 !!"<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+*/
+
     //RBNode r1(&b1, nullptr,nullptr,nullptr,BLACK);
     //RBTree_insert(&r1);
     //cout<<"done"<<endl;

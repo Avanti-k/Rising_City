@@ -2,6 +2,7 @@
 #define MINHEAP_H
 #include "Building.h"
 #include <vector>
+#include "RBTree.h"
 
 #define MAX_SIZE_MIN_HEAP 2000
 #define FIRST_INDEX 0
@@ -19,13 +20,14 @@ class MinHeap
         virtual ~MinHeap();
         /* inserts new node at end of vector and and then
         * call heapify_up to adjust heap property */
-        int insert_new(Building *);
+        int insert_new(RBNode *);
 
         /* Remove min - pop topmost node and return it
         It will replace last element with node and then do heapify_down*/
-        Building * remove_min();
+        RBNode * remove_min();
         // Planning to make it a vector of RBTree pointers
-        vector <Building *> min_heap;
+        //vector <Building *> min_heap;
+        vector <RBNode *> min_heap;
 
     //protected:
 
@@ -39,6 +41,7 @@ class MinHeap
     void heapify_down(int index);
 
     void copy_last_to_top(int first, int last);
+    void print_min_heap();
 
 
 };

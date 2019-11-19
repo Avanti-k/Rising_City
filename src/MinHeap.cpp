@@ -20,10 +20,10 @@ void MinHeap::heapify_up(int index)
         return;
 
     int parent_index = (index-1)/2;
-    bool is_smaller = Building::compare_executed_time(min_heap[index], min_heap[parent_index]);
-    if(is_smaller)
+    int ret = RBTree::compare_executed_time(min_heap[index], min_heap[parent_index]);
+    if(ret == SMALLER)
     {
-        Building* temp = min_heap[parent_index];
+        RBNode* temp = min_heap[parent_index];
         min_heap[parent_index] = min_heap[index];
         min_heap[index] = temp;
         heapify_up(parent_index);
@@ -41,15 +41,15 @@ void MinHeap::heapify_down(int index)
         return; //index is a leaf
 
     int smallest = index;
-    bool is_smaller = Building::compare_executed_time(min_heap[left_child], min_heap[smallest]);
+    int ret = RBTree::compare_executed_time(min_heap[left_child], min_heap[smallest]);
 
-    if(is_smaller)
+    if(ret == SMALLER)
     {
         smallest = left_child;
     }
-    is_smaller = Building::compare_executed_time(min_heap[right_child], min_heap[smallest]);
+    ret = RBTree::compare_executed_time(min_heap[right_child], min_heap[smallest]);
 
-    if((right_child < length) && (is_smaller))
+    if((right_child < length) && (ret == SMALLER))
     {
         smallest = right_child;
     }
@@ -57,7 +57,7 @@ void MinHeap::heapify_down(int index)
     if(smallest != index)
     {
         //need to swap
-        Building * temp = min_heap[index];
+        RBNode* temp = min_heap[index];
         min_heap[index] = min_heap[smallest];
         min_heap[smallest] = temp;
         heapify_down(smallest); // further call recursivly
@@ -75,7 +75,7 @@ void MinHeap::copy_last_to_top(int first, int last)
 /* inserts new building node in minheap
 * return type 0 - if error like capaicuty full
 *             1 - success */
-int MinHeap::insert_new(Building * b)
+int MinHeap::insert_new(RBNode * b)
 {
 
     int new_index = min_heap.size();
@@ -102,10 +102,10 @@ int MinHeap::insert_new(Building * b)
 /* remove min i.e top element
 * and then replace last element with first and remove back*/
 
-Building * MinHeap::remove_min()
+RBNode * MinHeap::remove_min()
 {
     // copy min element to pointer
-    Building * ret_node = min_heap.front();
+    RBNode * ret_node = min_heap.front();
 
     int last_index = min_heap.size() - 1;
 
@@ -113,6 +113,19 @@ Building * MinHeap::remove_min()
 
     // to adjust heap property
     heapify_down(FIRST_INDEX);
-
+    //TODO delete this node from RBT also
     return ret_node;
+}
+
+void MinHeap::print_min_heap()
+{
+    int len = min_heap.size();
+    cout<<"****************** MIN HEAP **************************"<<endl;
+    cout <<"\nMin heap size = "<<len<<endl;
+    for(int i = 0; i < len; i ++)
+    {
+        cout<<"Minheap["<<i<<"] = "<<"B_no : " <<min_heap[i]->get_building()->building_num<<" Exec time : "<<min_heap[i]->get_building()->executed_time<<endl;
+    }
+    cout<<"********************************************"<<endl;
+
 }

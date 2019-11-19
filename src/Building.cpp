@@ -3,11 +3,11 @@
 using namespace std;
 
 /* Parameterised constructor */
-Building::Building(int building_num, int total_time)
+Building::Building(int building_num, int total_time, int executed_time)
 {
     this->building_num = building_num;
     this->total_time = total_time;
-    this->executed_time = 0;
+    this->executed_time = executed_time;
 }
 
 /* Gives building id */

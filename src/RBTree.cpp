@@ -122,6 +122,24 @@ int RBTree::compare_building_num(RBNode * r1, RBNode * r2)
     }
 }
 
+int RBTree::compare_executed_time(RBNode* r1, RBNode * r2)
+{
+    if(r1->get_building()->get_executed_time() < r1->get_building()->get_executed_time())
+    {
+        return SMALLER;
+    }
+    else if (r1->get_building()->get_executed_time() > r1->get_building()->get_executed_time())
+    {
+        return LARGER;
+    }
+    else if(r1->get_building()->get_executed_time() == r1->get_building()->get_executed_time())
+    {
+        return (r1->get_building()->get_building_num() < r2->get_building()->get_building_num())? SMALLER: LARGER;
+    }
+    return SMALLER; // TOD by default change this later
+
+}
+
 // A recursive function to do level order traversal
 void RBTree::inorderHelper(RBNode *root)
 {
@@ -129,7 +147,7 @@ void RBTree::inorderHelper(RBNode *root)
         return;
 
     inorderHelper(root->left);
-    cout << root->get_building()->get_building_num() << " ( "<<root->get_color()<<")  ";
+    cout << root->get_building()->get_building_num() << "("<<root->get_color()<<")  ";
     inorderHelper(root->right);
 }
 
@@ -146,7 +164,7 @@ void RBTree::levelOrderHelper(RBNode *root)
     while (!q.empty())
     {
         RBNode *temp = q.front();
-        cout << temp->get_building()->get_building_num() << " ( "<<temp->get_color()<<")  ";
+        cout << temp->get_building()->get_building_num() << "("<<temp->get_color()<<")  ";
         q.pop();
 
         if (temp->get_left() != NULL)
@@ -357,13 +375,18 @@ void RBTree:: RBTree_insert(RBNode * node)
 
     if (u == NULL) {
       // u is NULL therefore v is leaf
+      //cout<<"\n()())(()()()()()()()()( u is null \n "<<endl;
+      //cout<<"\\n RBroot = "<<RBRoot<<endl;
+      //cout<<"\n v = "<<v<<endl;
       if (v == RBRoot) {
         // v is RBRoot, making RBRoot null
+        //cout<<"\n %%%%%%%%%%%%%%%%%%%% deleting RBRoot %%%%%%%%%%%%%% "<<endl;
         RBRoot = NULL;
       } else {
         if (uvBlack) {
           // u and v both black
           // v is leaf, fix double black at v
+          cout<<"\nhere 1"<<endl;
           fixDoubleBlack(v);
         } else {
           // u or v is red
@@ -379,7 +402,8 @@ void RBTree:: RBTree_insert(RBNode * node)
           parent->right = NULL;
         }
       }
-     // delete v;
+      //cout<<"just before deleting v "<<v->bldg->building_num<<endl;
+      //delete v;
       return;
     }
 
@@ -387,9 +411,16 @@ void RBTree:: RBTree_insert(RBNode * node)
       // v has 1 child
       if (v == RBRoot) {
         // v is RBRoot, assign the value of u to v, and delete u
+        /*
         v->bldg = u->bldg;
         v->left = v->right = NULL;
-        delete u;
+        delete u;*/
+        //  since we deleete actual node not just values
+        // in order to retain original memory address
+        swapValues(u,v);
+        u->left = u->right = NULL;
+        RBRoot = u;
+        //delete v;
       } else {
         // Detach v from tree and move u up
         if (v->isOnLeft()) {
@@ -397,7 +428,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         } else {
           parent->right = u;
         }
-        delete v;
+        //delete v; // TODO check delete gives error
         u->parent = parent;
         if (uvBlack) {
           // u and v both black, fix double black at u
@@ -412,7 +443,8 @@ void RBTree:: RBTree_insert(RBNode * node)
 
     // v has 2 children, swap values with successor and recurse
     swapValues(u, v);
-    deleteNode(u);
+    deleteNode(v); // since v is now at leaf node because actual memory address is to be deleted not just value
+    //deleteNode(u);
   }
 
  // utility function that deletes the node with given value
@@ -604,10 +636,27 @@ void RBTree:: RBTree_insert(RBNode * node)
   }
 
   void RBTree::swapValues(RBNode *u, RBNode *v) {
-    Building* temp;
+    /*Building* temp;
     temp = u->bldg;
     u->bldg = v->bldg;
     v->bldg = temp;
+    */
+    // just trying to swap actual nodes
+    // in order to retain their original addresses
+    // since Min heap access their address.
+    RBNode * temp_parent = v->parent;
+    RBNode * temp_left = v->left;
+    RBNode * temp_right = v->right;
+
+    v->parent = u->parent; //itself
+    v->left = u->left;
+    v->right = u->right;
+
+    u->parent = temp_parent;
+    u->left = temp_left;
+    u->right = temp_right;
+
+
   }
 
     // left rotates the given node
