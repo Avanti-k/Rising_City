@@ -31,13 +31,13 @@ int main()
     cout << "Hello world!" << endl;
     MinHeap mh;
     RBTree RBT;
-    Building b(5,30);
-    Building b1 (1,10);
-    Building b2 (4,40);
-    Building b3 (2,20);
-    Building b4 (6,50);
-    Building b5 (3,50);
-    Building b6 (7,50);
+    Building b(7,30);
+    Building b1 (6,10);
+    Building b2 (5,40);
+    Building b3 (4,20);
+    Building b4 (3,50);
+    Building b5 (2,50);
+    Building b6 (1,50);
 
 
     RBNode r(&b);
@@ -61,11 +61,18 @@ int main()
     RBNode r6(&b6);
     RBT.RBTree_insert(&r6);
 
-    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num;
-    cout<<"Printing tree"<<endl;
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\nPrinting tree in order"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\nLevel order"<<endl;
     RBT.levelOrderHelper(RBT.RBRoot);
 
 
+    RBT.deleteByVal(4);
+    cout<<"\nPrinting after DELETE tree in order"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\nLevel order"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
     //RBNode r1(&b1, nullptr,nullptr,nullptr,BLACK);
     //RBTree_insert(&r1);
     //cout<<"done"<<endl;

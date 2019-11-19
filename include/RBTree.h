@@ -26,6 +26,12 @@ class RBNode
         RBNode* get_parent();
         Building* get_building();
 
+        //delete funs
+        RBNode * uncle();
+        bool isOnLeft();
+        RBNode * sibling();
+        void moveDown(RBNode *nParent);
+        bool hasRedChild();
 
     //private:
         Building * bldg;
@@ -48,6 +54,20 @@ class RBTree
         RBNode* BSTInsert(RBNode* root, RBNode *node);
         int compare_building_num(RBNode * r1, RBNode * r2);
         void levelOrderHelper(RBNode *root);
+        void inorderHelper(RBNode *root);
+
+        // delete functions
+        void deleteByVal(int bldg_num);
+        void deleteNode(RBNode *v);
+        void fixDoubleBlack(RBNode *x);
+        RBNode * BSTreplace(RBNode *x);
+        RBNode *successor(RBNode *x);
+        void fixRedRed(RBNode *x);
+        void swapColors(RBNode *x1, RBNode *x2);
+        void swapValues(RBNode *u, RBNode *v);
+        void rightRotate(RBNode *x); // not sure if this is needed
+        void leftRotate(RBNode *x);
+        RBNode *search(int bldg);
 
     //protected:
 
