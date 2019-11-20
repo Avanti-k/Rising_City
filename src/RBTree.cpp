@@ -375,7 +375,7 @@ void RBTree:: RBTree_insert(RBNode * node)
 
     if (u == NULL) {
       // u is NULL therefore v is leaf
-      //cout<<"\n()())(()()()()()()()()( u is null \n "<<endl;
+      cout<<"\n()())(()()()()()()()()( u is null \n "<<endl;
       //cout<<"\\n RBroot = "<<RBRoot<<endl;
       //cout<<"\n v = "<<v<<endl;
       if (v == RBRoot) {
@@ -417,7 +417,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         delete u;*/
         //  since we deleete actual node not just values
         // in order to retain original memory address
-        swapValues(u,v);
+        //swapValues(u,v);
         u->left = u->right = NULL;
         RBRoot = u;
         //delete v;
@@ -442,6 +442,7 @@ void RBTree:: RBTree_insert(RBNode * node)
     }
 
     // v has 2 children, swap values with successor and recurse
+    cout<<"\n v has 2 children\n"<<endl;
     swapValues(u, v);
     deleteNode(v); // since v is now at leaf node because actual memory address is to be deleted not just value
     //deleteNode(u);
@@ -644,17 +645,100 @@ void RBTree:: RBTree_insert(RBNode * node)
     // just trying to swap actual nodes
     // in order to retain their original addresses
     // since Min heap access their address.
+    int root_detected = 0, v_left_child = 0;
+    cout<<"Swapping nodes with values : "<<u->get_building()->get_building_num()<<" & "<<v->get_building()->get_building_num()<<endl;
+    if(v == RBRoot)
+    {
+        root_detected = 1;
+    }
     RBNode * temp_parent = v->parent;
     RBNode * temp_left = v->left;
     RBNode * temp_right = v->right;
+
+    // if u is child of v
+    if (v->right == u)
+    {
+        if(temp_parent != NULL)
+        {
+            if(v->isOnLeft())
+            {
+                temp_parent->left = u;
+            }
+            else{
+                temp_parent->right = u;
+            }
+        }
+        if(temp_left != NULL)
+        {
+            temp_left->parent = u;
+            cout<<"temp_left val = "<<temp_left->get_building()->building_num<<"parent = u val = "<<u->get_building()->building_num<<endl;
+        }
+        // no need to change right child since u itself is the right child.
+
+        v->right = u->right;
+        v->left = u->left;
+        v->parent = u;
+        // no need of v->parent = u->parent because will cause self loop
+
+        u->parent = temp_parent;
+        u->left = temp_left;
+        //u->right = temp_right; not needed it will go in selfloop
+
+
+
+    }
+    else{
+
+    if( (!root_detected) && v->isOnLeft())
+    {
+        v_left_child = 1;
+    }
 
     v->parent = u->parent; //itself
     v->left = u->left;
     v->right = u->right;
 
+    if(u->right != NULL)
+    {
+        u->right->parent = v;
+    }
+    if(u->isOnLeft())
+    {
+        u->parent->left = v;
+    }
+    else{
+        u->parent->right = v;
+    }
+
     u->parent = temp_parent;
     u->left = temp_left;
     u->right = temp_right;
+    cout<<"----- u val :"<<u->get_building()->building_num<<" and right = tmep_right : "<<temp_right->get_building()->get_building_num()<<endl;
+
+    if(!root_detected)
+    {
+        if(v_left_child)
+        {
+            temp_parent->left = u;
+        }
+        else
+        {
+            temp_parent->right = u;
+        }
+    }
+    if(u->left != NULL)
+    {
+        u->left->parent = u;
+    }
+    if(u->right != NULL)
+    {
+       u->right->parent = u;
+    }
+    }
+    if(root_detected)
+    {
+        RBRoot = u;
+    }
 
 
   }

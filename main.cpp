@@ -94,6 +94,44 @@ int main()
         cout<<"\nRB TREE is empty"<<endl;
     }
 
+    while(RBT.RBRoot)
+    {
+    RBT.deleteNode(RBT.RBRoot);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+    }
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+    }
+
+
+    RBT.deleteNode(&r2);
+    if(RBT.RBRoot != NULL)
+    {
+    cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
+    cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
+    RBT.inorderHelper(RBT.RBRoot);
+    cout<<"\n -------------- Level order tree --------------------------"<<endl;
+    RBT.levelOrderHelper(RBT.RBRoot);
+    cout<<"\n-----------------------------------------------------"<<endl;
+    }
+    else{
+        cout<<"\nRB TREE is empty"<<endl;
+    }
+
+    cout <<"endeeeeeddddd"<<endl;
+
+
+    /*
+
     RBNode * min_node = MH.remove_min();
     cout<<"1) Removed min Bldg no : "<<min_node->get_building()->building_num<<" Exec time : "<<min_node->get_building()->get_executed_time()<<endl;
     MH.print_min_heap();
