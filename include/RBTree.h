@@ -56,6 +56,7 @@ class RBTree
         static int compare_executed_time(RBNode * r1, RBNode * r2);
         void levelOrderHelper(RBNode *root);
         void inorderHelper(RBNode *root);
+        void inorderHelper_range(RBNode *root,int b1, int b2);
 
         // delete functions
         void deleteByVal(int bldg_num);
@@ -69,6 +70,8 @@ class RBTree
         void rightRotate(RBNode *x); // not sure if this is needed
         void leftRotate(RBNode *x);
         RBNode *search(int bldg);
+        void print_single_building(int bldg_id);
+        void print_building_range(int b1, int b2);
 
     //protected:
 

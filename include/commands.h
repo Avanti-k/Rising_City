@@ -33,11 +33,11 @@ every time a command comes it is parsed and stored in this
 
 typedef struct command
 {
-    int arrival_time;
+    unsigned int arrival_time;
     COMMAND_TYPE cmd_type;
     int arg1;
     int arg2;
-    command(int ar_time, COMMAND_TYPE ct , int arg1, int arg2)
+    command(unsigned int ar_time, COMMAND_TYPE ct , int arg1, int arg2)
     {
         this->arrival_time = ar_time;
         this->cmd_type = ct;

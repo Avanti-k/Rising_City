@@ -6,14 +6,19 @@
 #include <bits/stdc++.h>
 #include "commands.h"
 #include <string>
-
+#include "queue"
 using namespace std;
 
 #define MAX_EXEC_TIME 5
 
 /* function to input file*/
 //TODO make it to some other class temporarily global
-vector<command> cmd_vector;
+queue<command> cmd_que;
+int tot_bldg_cnt = 0;
+int completed_bldg_cnt = 0;
+unsigned int timer = 0;
+MinHeap MH;
+RBTree RBT;
 
 // Function to remove all spaces from a given string
 string removeSpaces(string str)
@@ -22,18 +27,82 @@ string removeSpaces(string str)
     return str;
 }
 
+void insert_new_building()
+{
+    // pick from command from que
+    command new_cmd = cmd_que.front();
+    // form building object using cmd obj
+    Building *b = new Building(new_cmd.arg1, new_cmd.arg2);
+    RBNode * r = new RBNode(b);
+    RBT.RBTree_insert(r);
+    MH.insert_new(r);
+    // insert it into RBT node
+    // insert into min heap
+    MH.print_min_heap();
+}
+
+void print_building_wrapper()
+{
+    // pick up command from que
+    command new_cmd = cmd_que.front();
+    // check if arg2 is -1 if so call print(bid)
+    if(new_cmd.arg2 == INVALID_ARG)
+    {
+        // call print single building
+        RBT.print_single_building(new_cmd.arg1);
+    }
+    else
+    {
+        RBT.print_building_range(new_cmd.arg1, new_cmd.arg2);
+    }
+    // if arg2 present call print_range(b1,b2)
+}
+// main function to execute buildings
+
+int execute_buildings()
+{
+    cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
+    while(tot_bldg_cnt != completed_bldg_cnt || (!cmd_que.empty()))
+    {
+     // check whether any command ready at this point
+     if(cmd_que.front().arrival_time == timer)
+     {
+        // cmds in sorted order, so just check first command.
+        // arrival time matches execute it
+        if(cmd_que.front().cmd_type == INSERT)
+        {
+            insert_new_building();
+            completed_bldg_cnt ++;
+            cout<<"\n************ inserted a building ******"<<endl;
+        }
+        else{
+            // command type in print
+            print_building_wrapper();
+        }
+        cmd_que.pop();// remove it from command que as it is served
+
+     }
+     timer ++;
+
+    }
+    cout<<"------------- COMPLETED BUILDINGS = "<<completed_bldg_cnt<<endl;
+    return 1;
+}
+
+
+
 int input_read()
 {
 
 //TODO add error checks to not read blank lines
     ifstream ip_file;
     //TODO Add error check for file handling
-    ip_file.open("../project_material/Sample_input1.txt");
+    ip_file.open("../project_material/input.txt");
     string line;
     COMMAND_TYPE cmd_type;
     int arg1 = INVALID_ARG, arg2 = INVALID_ARG;
 
-    cout<<"------- Before reading vector size = "<<cmd_vector.size()<<endl;
+    cout<<"------- Before reading vector size = "<<cmd_que.size()<<endl;
 
     while (getline(ip_file, line)) {
         // using printf() in all tests for consistency
@@ -44,48 +113,50 @@ int input_read()
 
         // get arrival time
         getline(sstream, arrival_time, ':');
-        cout<<"Arrival time = "<<arrival_time<<endl;
+        //cout<<"Arrival time = "<<arrival_time<<endl;
 
         getline(sstream, cmd_string, '(');
-        cout<<"Command ="<<cmd_string<<endl;
+        //cout<<"Command ="<<cmd_string<<endl;
 
 
         getline(sstream, arg1_str, ',');
-        cout<<"ARG 1 = "<<arg1_str<<endl;
+        //cout<<"ARG 1 = "<<arg1_str<<endl;
         arg1 = atoi(arg1_str.c_str());
-        cout<<"ARG 1 int = "<<arg1<<endl;
+        //cout<<"ARG 1 int = "<<arg1<<endl;
 
         getline(sstream, arg2_str, ')');
-        cout<<"ARG 2 = "<<arg2_str<<endl;
+        //cout<<"ARG 2 = "<<arg2_str<<endl;
         if(removeSpaces(arg2_str) != string(""))
             arg2 = atoi(arg2_str.c_str());
         else
             arg2 = -1;
-        cout<<"ARG 2 int = "<<arg2<<endl;
+        //cout<<"ARG 2 int = "<<arg2<<endl;
 
         if(removeSpaces(cmd_string) == string("Insert"))
         {
-            cout<<"------------insert command found"<<endl;
+            //cout<<"------------insert command found"<<endl;
             cmd_type = INSERT;
+            tot_bldg_cnt ++;
         }
 
         else if(removeSpaces(cmd_string) == string("PrintBuilding"))
         {
-            cout<<"-----------print command found"<<endl;
+            //cout<<"-----------print command found"<<endl;
             cmd_type = PRINT_BUILDING;
         }
         else{
-            cout << "\n Error : Invalid Command"<<endl;
+            //cout << "\n Error : Invalid Command"<<endl;
             return ERROR;
         }
 
-    cmd_vector.push_back(command(atoi(arrival_time.c_str()), cmd_type, arg1, arg2));
+    cmd_que.push(command(atoi(arrival_time.c_str()), cmd_type, arg1, arg2));
     }
 
 
 
-
-
+    cout<<"-------------- Total buildings inserted = "<<tot_bldg_cnt<<endl;
+    cout<<"------------------------------------------------------------"<<endl;
+    cout<<"------------------------------------------------------------"<<endl;
 
 
     return 0;
@@ -93,25 +164,28 @@ int input_read()
 }
 
 
-void print_cmd_vector()
+/*void print_cmd_vector()
 {
-    cout<<"\n------- vector size = "<<cmd_vector.size()<<endl;
+    cout<<"\n------- vector size = "<<cmd_que.size()<<endl;
 
     //printing cmd vector
-    for(int i = 0; i < cmd_vector.size();i ++)
+    queue <command> iterator :: it;
+    for(it = cmd_que.; i < cmd_vector.size();i ++)
     {
-        cout<<"\nArrival time "<<i<<" = "<<cmd_vector[i].arrival_time<<endl;
+        cout<<"\nArrival time "<<i<<" = "<<cmd_que[i].arrival_time<<endl;
     }
-}
+}*/
 
 int main()
 {
     cout << "Hello world!" << endl;
     input_read();
-    print_cmd_vector();
-/*
-    MinHeap MH;
-    RBTree RBT;
+    //print_cmd_vector();
+    execute_buildings();
+
+    //MinHeap MH;
+    //RBTree RBT;
+    /*
     Building b(7,30, 7);
     Building b1 (6,10 ,6);
     Building b2 (5,40, 5);
@@ -324,6 +398,7 @@ if(RBT.RBRoot != NULL)
     RBT.deleteNode(min_node);
     if(RBT.RBRoot != NULL)
     {
+
     cout<<"RBTREE root = "<<RBT.RBRoot->get_building()->building_num<<endl;
     cout<<"\n ---------------- Printing tree in order ------------------"<<endl;
     RBT.inorderHelper(RBT.RBRoot);

@@ -151,6 +151,22 @@ void RBTree::inorderHelper(RBNode *root)
     inorderHelper(root->right);
 }
 
+// A recursive function to do level order traversal
+void RBTree::inorderHelper_range(RBNode *root,int b1, int b2)
+{
+    if (root == NULL)
+        return;
+
+    inorderHelper_range(root->left,b1,b2);
+    if((root->get_building()->get_building_num() >= b1) && (root->get_building()->get_building_num() <= b2))
+    {
+        // TODO remove this initial comma.
+        cout<<",("<<root->get_building()->get_building_num()<<","
+                    <<root->get_building()->get_executed_time()<<","
+                    <<root->get_building()->get_total_time()<<")";
+    }
+    inorderHelper_range(root->right,b1, b2);
+}
 
 // Utility function to do level order traversal
 void RBTree::levelOrderHelper(RBNode *root)
@@ -784,4 +800,33 @@ void RBTree:: RBTree_insert(RBNode * node)
 
     // connect new parent with x
     nParent->right = x;
+  }
+
+  void RBTree :: print_single_building(int bldg_id)
+  {
+        cout<<"________________________________________________________"<<endl;
+        RBNode * ret = search(bldg_id);
+        if(ret->get_building()->get_building_num() != bldg_id)
+        {
+            cout<<"\n Print Error : Cannot find Building : "<<bldg_id<<endl;
+            cout<<"(0,0,0)"<<endl;
+        }
+        else
+        {
+            cout<<"\n("<<ret->get_building()->get_building_num()<<","
+                    <<ret->get_building()->get_executed_time()<<","
+                    <<ret->get_building()->get_total_time()<<")"<<endl;
+
+        }
+        cout<<"________________________________________________________"<<endl;
+
+  }
+
+  void RBTree :: print_building_range(int b1, int b2)
+  {
+        cout<<"________________________________________________________"<<endl;
+        cout<<"\n Inside print range building for "<<b1<<" and "<<b2<<endl;
+        this->inorderHelper_range(this->RBRoot, b1, b2);
+        cout<<"________________________________________________________"<<endl;
+
   }
