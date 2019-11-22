@@ -3,9 +3,12 @@
 #include <stddef.h>
 #include <queue>
 #include <iostream>
+#include <fstream>
+
 
 using namespace std;
-
+extern unsigned int timer;
+extern ofstream op;
 RBNode::RBNode(Building* b)
 {
     this->bldg = b;
@@ -124,15 +127,15 @@ int RBTree::compare_building_num(RBNode * r1, RBNode * r2)
 
 int RBTree::compare_executed_time(RBNode* r1, RBNode * r2)
 {
-    if(r1->get_building()->get_executed_time() < r1->get_building()->get_executed_time())
+    if(r1->get_building()->get_executed_time() < r2->get_building()->get_executed_time())
     {
         return SMALLER;
     }
-    else if (r1->get_building()->get_executed_time() > r1->get_building()->get_executed_time())
+    else if (r1->get_building()->get_executed_time() > r2->get_building()->get_executed_time())
     {
         return LARGER;
     }
-    else if(r1->get_building()->get_executed_time() == r1->get_building()->get_executed_time())
+    else if(r1->get_building()->get_executed_time() == r2->get_building()->get_executed_time())
     {
         return (r1->get_building()->get_building_num() < r2->get_building()->get_building_num())? SMALLER: LARGER;
     }
@@ -162,6 +165,9 @@ void RBTree::inorderHelper_range(RBNode *root,int b1, int b2)
     {
         // TODO remove this initial comma.
         cout<<",("<<root->get_building()->get_building_num()<<","
+                    <<root->get_building()->get_executed_time()<<","
+                    <<root->get_building()->get_total_time()<<")";
+        op <<timer<<" : "  <<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
                     <<root->get_building()->get_total_time()<<")";
     }
@@ -391,7 +397,7 @@ void RBTree:: RBTree_insert(RBNode * node)
 
     if (u == NULL) {
       // u is NULL therefore v is leaf
-      cout<<"\n()())(()()()()()()()()( u is null \n "<<endl;
+      //cout<<"\n()())(()()()()()()()()( u is null \n "<<endl;
       //cout<<"\\n RBroot = "<<RBRoot<<endl;
       //cout<<"\n v = "<<v<<endl;
       if (v == RBRoot) {
@@ -402,7 +408,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         if (uvBlack) {
           // u and v both black
           // v is leaf, fix double black at v
-          cout<<"\nhere 1"<<endl;
+          //cout<<"\nhere 1"<<endl;
           fixDoubleBlack(v);
         } else {
           // u or v is red
@@ -458,7 +464,7 @@ void RBTree:: RBTree_insert(RBNode * node)
     }
 
     // v has 2 children, swap values with successor and recurse
-    cout<<"\n v has 2 children\n"<<endl;
+    //cout<<"\n v has 2 children\n"<<endl;
     swapValues(u, v);
     deleteNode(v); // since v is now at leaf node because actual memory address is to be deleted not just value
     //deleteNode(u);
@@ -662,7 +668,7 @@ void RBTree:: RBTree_insert(RBNode * node)
     // in order to retain their original addresses
     // since Min heap access their address.
     int root_detected = 0, v_left_child = 0;
-    cout<<"Swapping nodes with values : "<<u->get_building()->get_building_num()<<" & "<<v->get_building()->get_building_num()<<endl;
+    //cout<<"Swapping nodes with values : "<<u->get_building()->get_building_num()<<" & "<<v->get_building()->get_building_num()<<endl;
     if(v == RBRoot)
     {
         root_detected = 1;
@@ -687,7 +693,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         if(temp_left != NULL)
         {
             temp_left->parent = u;
-            cout<<"temp_left val = "<<temp_left->get_building()->building_num<<"parent = u val = "<<u->get_building()->building_num<<endl;
+            //cout<<"temp_left val = "<<temp_left->get_building()->building_num<<"parent = u val = "<<u->get_building()->building_num<<endl;
         }
         // no need to change right child since u itself is the right child.
 
@@ -729,7 +735,7 @@ void RBTree:: RBTree_insert(RBNode * node)
     u->parent = temp_parent;
     u->left = temp_left;
     u->right = temp_right;
-    cout<<"----- u val :"<<u->get_building()->building_num<<" and right = tmep_right : "<<temp_right->get_building()->get_building_num()<<endl;
+    //cout<<"----- u val :"<<u->get_building()->building_num<<" and right = tmep_right : "<<temp_right->get_building()->get_building_num()<<endl;
 
     if(!root_detected)
     {
@@ -805,28 +811,44 @@ void RBTree:: RBTree_insert(RBNode * node)
   void RBTree :: print_single_building(int bldg_id)
   {
         cout<<"________________________________________________________"<<endl;
+        if(RBRoot == NULL)
+        {
+            cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
+            return;
+        }
         RBNode * ret = search(bldg_id);
         if(ret->get_building()->get_building_num() != bldg_id)
         {
             cout<<"\n Print Error : Cannot find Building : "<<bldg_id<<endl;
             cout<<"(0,0,0)"<<endl;
+            op<<timer<<" : (0,0,0)"<<endl;
+
         }
         else
         {
+            cout<<"\n"<<timer<<": _________ Print single building cmd ______________"<<endl;
             cout<<"\n("<<ret->get_building()->get_building_num()<<","
+                    <<ret->get_building()->get_executed_time()<<","
+                    <<ret->get_building()->get_total_time()<<")"<<endl;
+            op<<"\n"<<timer<<" : ("<<ret->get_building()->get_building_num()<<","
                     <<ret->get_building()->get_executed_time()<<","
                     <<ret->get_building()->get_total_time()<<")"<<endl;
 
         }
-        cout<<"________________________________________________________"<<endl;
+        cout<<"________________________________________________________\n\n"<<endl;
 
   }
 
   void RBTree :: print_building_range(int b1, int b2)
   {
-        cout<<"________________________________________________________"<<endl;
+        cout<<"\n"<<timer<<":________________________________________________________"<<endl;
         cout<<"\n Inside print range building for "<<b1<<" and "<<b2<<endl;
+        if(RBRoot == NULL)
+        {
+            cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
+            return;
+        }
         this->inorderHelper_range(this->RBRoot, b1, b2);
-        cout<<"________________________________________________________"<<endl;
+        cout<<"\n________________________________________________________\n\n"<<endl;
 
   }

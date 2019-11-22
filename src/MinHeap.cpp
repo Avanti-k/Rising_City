@@ -95,7 +95,8 @@ int MinHeap::insert_new(RBNode * b)
     // starting from index = length
     heapify_up(new_index);
 
-    cout<<"insert new inside";
+    //cout<<"insert new inside";
+    //print_min_heap();
     return SUCCESS;
 }
 
@@ -104,6 +105,11 @@ int MinHeap::insert_new(RBNode * b)
 
 RBNode * MinHeap::remove_min()
 {
+
+    if(min_heap.empty())
+    {
+        return NULL;
+    }
     // copy min element to pointer
     RBNode * ret_node = min_heap.front();
 

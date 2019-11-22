@@ -7,6 +7,8 @@
 #include "commands.h"
 #include <string>
 #include "queue"
+#include <fstream>
+
 using namespace std;
 
 #define MAX_EXEC_TIME 5
@@ -19,7 +21,7 @@ int completed_bldg_cnt = 0;
 unsigned int timer = 0;
 MinHeap MH;
 RBTree RBT;
-
+ofstream op;
 // Function to remove all spaces from a given string
 string removeSpaces(string str)
 {
@@ -38,7 +40,7 @@ void insert_new_building()
     MH.insert_new(r);
     // insert it into RBT node
     // insert into min heap
-    MH.print_min_heap();
+    //MH.print_min_heap();
 }
 
 void print_building_wrapper()
@@ -62,18 +64,27 @@ void print_building_wrapper()
 int execute_buildings()
 {
     cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
+    //ofstream op;
+    op.open("ak_op.txt");
+    ofstream debug_op;
+    debug_op.open("debug_op.txt");
+    bool execution_on = false;
+    RBNode * curr;
+    int days_remaining = 0, target = 0, start_time = 0, stop_time = 0;
     while(tot_bldg_cnt != completed_bldg_cnt || (!cmd_que.empty()))
     {
      // check whether any command ready at this point
-     if(cmd_que.front().arrival_time == timer)
+     //cout<<"\n ------------------------ Entered time : "<<timer<<"--------------------------"<<endl;
+
+        if(cmd_que.front().arrival_time == timer)
      {
         // cmds in sorted order, so just check first command.
         // arrival time matches execute it
         if(cmd_que.front().cmd_type == INSERT)
         {
             insert_new_building();
-            completed_bldg_cnt ++;
-            cout<<"\n************ inserted a building ******"<<endl;
+            //completed_bldg_cnt ++;
+            //cout<<"\n************ inserted a building ******"<<endl;
         }
         else{
             // command type in print
@@ -82,6 +93,72 @@ int execute_buildings()
         cmd_que.pop();// remove it from command que as it is served
 
      }
+if(timer!= 0)
+{
+    if(!execution_on)
+    {
+        // pick up a min building and start execution
+
+        curr = MH.remove_min();
+        if(curr == NULL)
+        {
+            cout<<"MIN HEAP IS EMPTY\n"<<endl;
+            debug_op<<timer<<endl;
+
+            timer ++;
+            continue;
+        }
+        //cout<<"Buildin selected for execution = "<<curr->get_building()->get_building_num()<<endl;
+        execution_on = true;
+        start_time = timer;
+        days_remaining = curr->get_building()->get_total_time() - curr->get_building()->executed_time;
+        target = (days_remaining < MAX_EXEC_DAYS)? days_remaining: MAX_EXEC_DAYS;
+        stop_time = start_time + target - 1;
+        //cout<<"Start time = "<<start_time<<" Stop time = "<<stop_time<<endl;
+    }
+     else{
+        // execuiton on
+        //check whether to stpo execution
+        if(timer == stop_time)
+        {
+            // stop time
+            // update executed time
+            curr->get_building()->executed_time += target;
+            if(curr->get_building()->get_executed_time() == curr->get_building()->get_total_time())
+            {
+                // execution for the buildng complete remove it from RBT
+                cout<<"\n"<<timer<<": _______________ Completed buildin _______________"<<endl;
+                cout<<"("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
+                cout<<"\n___________________________________________________"<<endl;
+                cout<<"_____________________________________________________\n\n"<<endl;
+                op<<timer<<" : ("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
+                RBT.deleteNode(curr);
+                completed_bldg_cnt ++;
+            }
+            else{
+                // execution still remaining so put it back in min heap
+                // with updated executed time
+                MH.insert_new(curr);
+                //cout<<"Updated exec time of building "<<curr->get_building()->get_building_num()
+                  //  <<"= "<<curr->get_building()->executed_time<<endl;
+            }
+
+            // clearing up variales for next instance
+            execution_on = false;
+            start_time = 0;
+            curr = NULL;
+            days_remaining = 0;
+            target = 0;
+            stop_time = 0;
+        }
+        else
+        {
+            //cout<<"ongoing"<<endl;
+        }
+
+        }
+     }
+     debug_op<<timer<<endl;
      timer ++;
 
     }
@@ -97,7 +174,7 @@ int input_read()
 //TODO add error checks to not read blank lines
     ifstream ip_file;
     //TODO Add error check for file handling
-    ip_file.open("../project_material/input.txt");
+    ip_file.open("../project_material/Sample_input1.txt");
     string line;
     COMMAND_TYPE cmd_type;
     int arg1 = INVALID_ARG, arg2 = INVALID_ARG;
@@ -106,7 +183,7 @@ int input_read()
 
     while (getline(ip_file, line)) {
         // using printf() in all tests for consistency
-        printf("%s\n", line.c_str());
+        //printf("%s\n", line.c_str());
 
         stringstream sstream(line);
         string arrival_time, cmd_string, arg1_str, arg2_str;
@@ -185,10 +262,10 @@ int main()
 
     //MinHeap MH;
     //RBTree RBT;
-    /*
-    Building b(7,30, 7);
-    Building b1 (6,10 ,6);
-    Building b2 (5,40, 5);
+/*
+    Building b(7,30, 0);
+    Building b1 (6,10 ,15);
+    Building b2 (5,40, 10);
     Building b3 (4,20,4);
     Building b4 (3,50,3);
     Building b5 (2,50,2);
@@ -199,18 +276,18 @@ int main()
     RBT.RBTree_insert(&r);
     MH.insert_new(&r);
 
-    //MH.print_min_heap();
+    MH.print_min_heap();
 
     RBNode r1(&b1);
     RBT.RBTree_insert(&r1);
     MH.insert_new(&r1);
-    //MH.print_min_heap();
+    MH.print_min_heap();
 
 
     RBNode r2(&b2);
     RBT.RBTree_insert(&r2);
     MH.insert_new(&r2);
-    //MH.print_min_heap();
+    MH.print_min_heap();
 
 
     RBNode r3(&b3);

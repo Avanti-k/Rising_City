@@ -1,7 +1,7 @@
 #ifndef BUILDING_H
 #define BUILDING_H
 
-
+#define MAX_EXEC_DAYS 5
 class Building
 {
     public:
