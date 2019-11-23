@@ -65,16 +65,23 @@ int execute_buildings()
 {
     cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
     //ofstream op;
-    op.open("ak_op.txt");
+    //op.open("../project_material/sample_op2/ak_op2.txt");
+    op.open("../project_material/sample_op2/op2.txt");
+
     ofstream debug_op;
-    debug_op.open("debug_op.txt");
+    debug_op.open("../project_material/sample_op2/op2_d.txt");
     bool execution_on = false;
     RBNode * curr;
     int days_remaining = 0, target = 0, start_time = 0, stop_time = 0;
     while(tot_bldg_cnt != completed_bldg_cnt || (!cmd_que.empty()))
     {
      // check whether any command ready at this point
-     //cout<<"\n ------------------------ Entered time : "<<timer<<"--------------------------"<<endl;
+     cout<<"\n ------------------------ Entered time : "<<timer<<"--------------------------"<<endl;
+        cout<<"\n cmd que.front arrival time = "<<cmd_que.front().arrival_time<<endl;
+        if((timer != 0) && (execution_on == true))
+        {
+            curr->get_building()->executed_time += 1;
+        }
 
         if(cmd_que.front().arrival_time == timer)
      {
@@ -97,6 +104,7 @@ if(timer!= 0)
 {
     if(!execution_on)
     {
+
         // pick up a min building and start execution
 
         curr = MH.remove_min();
@@ -115,6 +123,8 @@ if(timer!= 0)
         target = (days_remaining < MAX_EXEC_DAYS)? days_remaining: MAX_EXEC_DAYS;
         stop_time = start_time + target - 1;
         //cout<<"Start time = "<<start_time<<" Stop time = "<<stop_time<<endl;
+        curr->get_building()->executed_time += 1;
+
     }
      else{
         // execuiton on
@@ -123,7 +133,9 @@ if(timer!= 0)
         {
             // stop time
             // update executed time
-            curr->get_building()->executed_time += target;
+            //curr->get_building()->executed_time += target;
+            //curr->get_building()->executed_time += 1;
+
             if(curr->get_building()->get_executed_time() == curr->get_building()->get_total_time())
             {
                 // execution for the buildng complete remove it from RBT
@@ -131,7 +143,7 @@ if(timer!= 0)
                 cout<<"("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
                 cout<<"\n___________________________________________________"<<endl;
                 cout<<"_____________________________________________________\n\n"<<endl;
-                op<<timer<<" : ("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
+                op<<"\n"<<timer<<" : ("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
                 RBT.deleteNode(curr);
                 completed_bldg_cnt ++;
             }
@@ -139,8 +151,8 @@ if(timer!= 0)
                 // execution still remaining so put it back in min heap
                 // with updated executed time
                 MH.insert_new(curr);
-                //cout<<"Updated exec time of building "<<curr->get_building()->get_building_num()
-                  //  <<"= "<<curr->get_building()->executed_time<<endl;
+                cout<<"Updated exec time of building "<<curr->get_building()->get_building_num()
+                   <<"= "<<curr->get_building()->executed_time<<endl;
             }
 
             // clearing up variales for next instance
@@ -154,6 +166,7 @@ if(timer!= 0)
         else
         {
             //cout<<"ongoing"<<endl;
+            //curr->get_building()->executed_time += 1;
         }
 
         }
@@ -174,7 +187,9 @@ int input_read()
 //TODO add error checks to not read blank lines
     ifstream ip_file;
     //TODO Add error check for file handling
-    ip_file.open("../project_material/Sample_input1.txt");
+    //ip_file.open("../project_material/input.txt");
+    ip_file.open("../project_material/sample_op2/Sample_input2.txt");
+
     string line;
     COMMAND_TYPE cmd_type;
     int arg1 = INVALID_ARG, arg2 = INVALID_ARG;
@@ -216,15 +231,12 @@ int input_read()
             tot_bldg_cnt ++;
         }
 
-        else if(removeSpaces(cmd_string) == string("PrintBuilding"))
+        else
         {
             //cout<<"-----------print command found"<<endl;
             cmd_type = PRINT_BUILDING;
         }
-        else{
-            //cout << "\n Error : Invalid Command"<<endl;
-            return ERROR;
-        }
+
 
     cmd_que.push(command(atoi(arrival_time.c_str()), cmd_type, arg1, arg2));
     }

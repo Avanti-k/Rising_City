@@ -96,7 +96,7 @@ int MinHeap::insert_new(RBNode * b)
     heapify_up(new_index);
 
     //cout<<"insert new inside";
-    //print_min_heap();
+    print_min_heap();
     return SUCCESS;
 }
 

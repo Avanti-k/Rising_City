@@ -167,7 +167,7 @@ void RBTree::inorderHelper_range(RBNode *root,int b1, int b2)
         cout<<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
                     <<root->get_building()->get_total_time()<<")";
-        op <<timer<<" : "  <<",("<<root->get_building()->get_building_num()<<","
+        op <<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
                     <<root->get_building()->get_total_time()<<")";
     }
@@ -821,7 +821,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         {
             cout<<"\n Print Error : Cannot find Building : "<<bldg_id<<endl;
             cout<<"(0,0,0)"<<endl;
-            op<<timer<<" : (0,0,0)"<<endl;
+            op<<"\n"<<timer<<" : (0,0,0)"<<endl;
 
         }
         else
@@ -848,6 +848,7 @@ void RBTree:: RBTree_insert(RBNode * node)
             cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
             return;
         }
+        op<<"\n"<<timer<<" : "; // to print on next line
         this->inorderHelper_range(this->RBRoot, b1, b2);
         cout<<"\n________________________________________________________\n\n"<<endl;
 
