@@ -66,7 +66,7 @@ int execute_buildings()
     cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
     //ofstream op;
     //op.open("../project_material/sample_op2/ak_op2.txt");
-    op.open("../project_material/sample_op2/op2.txt");
+    op.open("../output_file.txt");
 
     ofstream debug_op;
     debug_op.open("../project_material/sample_op2/op2_d.txt");
@@ -212,15 +212,16 @@ int execute_buildings()
 
 
 
-int input_read()
+int input_read( char * file_name)
 {
 
 //TODO add error checks to not read blank lines
     ifstream ip_file;
     //TODO Add error check for file handling
     //ip_file.open("../project_material/input.txt");
-    ip_file.open("../project_material/sample_op2/Sample_input2.txt");
-
+    //ip_file.open("../ta/input.txt");
+    cout<<"File to open = "<<file_name<<endl;
+    ip_file.open(file_name);
     string line;
     COMMAND_TYPE cmd_type;
     int arg1 = INVALID_ARG, arg2 = INVALID_ARG;
@@ -296,10 +297,17 @@ int input_read()
     }
 }*/
 
-int main()
+int main(int argc, char * argv[])
 {
     cout << "Hello world!" << endl;
-    input_read();
+    if(argc == 1)
+    {
+        cout<<"\n Please give file name\n"<<endl;
+        return 0;
+    }
+    //cout<<"argv[1] = "<<argv[1];
+    //string file_name = argv[1];
+    input_read(argv[1]);
     //print_cmd_vector();
     execute_buildings();
 

@@ -1,7 +1,11 @@
 #ifndef RBTREE_H
 #define RBTREE_H
 #include "Building.h"
+#include <string>
+#include <sstream>
 
+// for removing ,
+#define START_POS 1
 enum RBColor {
     BLACK,
     RED
@@ -26,6 +30,7 @@ class RBNode
         RBNode* get_parent();
         Building* get_building();
 
+
         //delete funs
         RBNode * uncle();
         bool isOnLeft();
@@ -33,7 +38,6 @@ class RBNode
         void moveDown(RBNode *nParent);
         bool hasRedChild();
 
-    //private:
         Building * bldg;
         RBNode * left;
         RBNode * right;
@@ -56,7 +60,7 @@ class RBTree
         static int compare_executed_time(RBNode * r1, RBNode * r2);
         void levelOrderHelper(RBNode *root);
         void inorderHelper(RBNode *root);
-        void inorderHelper_range(RBNode *root,int b1, int b2);
+        std::string inorderHelper_range(RBNode *root,int b1, int b2);
 
         // delete functions
         void deleteByVal(int bldg_num);

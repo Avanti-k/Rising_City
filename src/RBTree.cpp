@@ -4,7 +4,9 @@
 #include <queue>
 #include <iostream>
 #include <fstream>
-
+#include <string>
+#include<strstream>
+#include <cstdlib>
 
 using namespace std;
 extern unsigned int timer;
@@ -155,23 +157,26 @@ void RBTree::inorderHelper(RBNode *root)
 }
 
 // A recursive function to do level order traversal
-void RBTree::inorderHelper_range(RBNode *root,int b1, int b2)
+string RBTree::inorderHelper_range(RBNode *root,int b1, int b2)
 {
+    string ret = "";
     if (root == NULL)
-        return;
+        return ret;
 
-    inorderHelper_range(root->left,b1,b2);
+    ret.append(inorderHelper_range(root->left,b1,b2));
     if((root->get_building()->get_building_num() >= b1) && (root->get_building()->get_building_num() <= b2))
     {
-        // TODO remove this initial comma.
         cout<<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
                     <<root->get_building()->get_total_time()<<")";
-        op <<",("<<root->get_building()->get_building_num()<<","
+        std::stringstream s;
+        s<<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
                     <<root->get_building()->get_total_time()<<")";
+        ret.append(s.str());
     }
-    inorderHelper_range(root->right,b1, b2);
+    ret.append(inorderHelper_range(root->right,b1, b2));
+    return ret;
 }
 
 // Utility function to do level order traversal
@@ -365,7 +370,7 @@ RBNode* RBTree::BSTInsert(RBNode* root, RBNode *node)
     else if(ret == EQUAL)
     {
         cout<<"Error: Duplicate Building IDs !"<<endl;
-        return NULL;
+        std::exit(0);
     }
 
     /* return the (unchanged) node pointer */
@@ -841,6 +846,7 @@ void RBTree:: RBTree_insert(RBNode * node)
 
   void RBTree :: print_building_range(int b1, int b2)
   {
+        string to_write;
         cout<<"\n"<<timer<<":________________________________________________________"<<endl;
         cout<<"\n Inside print range building for "<<b1<<" and "<<b2<<endl;
         if(RBRoot == NULL)
@@ -848,8 +854,18 @@ void RBTree:: RBTree_insert(RBNode * node)
             cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
             return;
         }
-        op<<"\n"<<timer<<" : "; // to print on next line
-        this->inorderHelper_range(this->RBRoot, b1, b2);
+        string ret = this->inorderHelper_range(this->RBRoot, b1, b2);
+        if(ret.length() == 0)// null
+        {
+            to_write = "(0,0,0)";
+            cout<<"\n NO building found in this range\n"<<endl;
+        }
+        else
+        {
+            to_write = ret.substr(START_POS, ret.length()); // to remove initial extra comma
+        }
+        op<<"\n"<<timer<<" : "<<to_write; // to print on next line
+
         cout<<"\n________________________________________________________\n\n"<<endl;
 
   }
