@@ -826,7 +826,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         {
             cout<<"\n Print Error : Cannot find Building : "<<bldg_id<<endl;
             cout<<"(0,0,0)"<<endl;
-            op<<"\n"<<timer<<" : (0,0,0)"<<endl;
+            op<<timer<<" : (0,0,0)"<<endl;
 
         }
         else
@@ -835,7 +835,7 @@ void RBTree:: RBTree_insert(RBNode * node)
             cout<<"\n("<<ret->get_building()->get_building_num()<<","
                     <<ret->get_building()->get_executed_time()<<","
                     <<ret->get_building()->get_total_time()<<")"<<endl;
-            op<<"\n"<<timer<<" : ("<<ret->get_building()->get_building_num()<<","
+            op<<timer<<" : ("<<ret->get_building()->get_building_num()<<","
                     <<ret->get_building()->get_executed_time()<<","
                     <<ret->get_building()->get_total_time()<<")"<<endl;
 
@@ -864,7 +864,7 @@ void RBTree:: RBTree_insert(RBNode * node)
         {
             to_write = ret.substr(START_POS, ret.length()); // to remove initial extra comma
         }
-        op<<"\n"<<timer<<" : "<<to_write; // to print on next line
+        op<<timer<<" : "<<to_write<<endl; // to print on next line
 
         cout<<"\n________________________________________________________\n\n"<<endl;
 

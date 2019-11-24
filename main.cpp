@@ -190,7 +190,7 @@ int execute_buildings()
 
         if(building_finished == true)
         {
-            op<<"\n"<<timer<<" : ("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
+            op<<timer<<" : ("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
             RBT.deleteNode(curr);
             completed_bldg_cnt ++;
             building_finished = false;
