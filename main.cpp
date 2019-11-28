@@ -78,7 +78,7 @@ void print_building_wrapper()
 /* Main function to execute buildings */
 int execute_buildings()
 {
-    cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
+    //cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
     // Open Output file
     op.open("../output_file.txt");
     // Execution on - keeps track if any building is under execution or not
@@ -98,8 +98,8 @@ int execute_buildings()
     while(tot_bldg_cnt != completed_bldg_cnt || (!cmd_que.empty()))
     {
         // check whether any command ready at this point
-        /*cout<<"\n ------------------------ Entered time : "<<timer<<"--------------------------"<<endl;
-        cout<<"\n cmd que.front arrival time = "<<cmd_que.front().arrival_time<<endl;*/
+        // cout<<"\n ------------------------ Entered time : "<<days_timer<<"--------------------------"<<endl;
+        // cout<<"\n cmd que.front arrival time = "<<cmd_que.front().arrival_time<<endl;
 
         // This condition is needed since we don't start construction on Day 0.
         if(days_timer != 0)
@@ -111,12 +111,11 @@ int execute_buildings()
                 curr = MH.remove_min();
                 if(curr == NULL)
                 {
-                    cout<<"MIN HEAP IS EMPTY\n"<<endl;
-                    days_timer ++;
+                    //cout<<"MIN HEAP IS EMPTY\n"<<endl;
+                    //days_timer ++;
                     //continue;// TODO check if goto required
                     goto serve_command;
                 }
-
                 // Set execution instance
                 execution_on = true;
                 // Set start time
@@ -125,11 +124,23 @@ int execute_buildings()
                 days_remaining = curr->get_building()->get_total_time() - curr->get_building()->executed_time;
                 // Select minimum of days_remaining of MAX EXECUTION DAYS(5)
                 target = (days_remaining < MAX_EXEC_DAYS)? days_remaining: MAX_EXEC_DAYS;
+
                 // Calculate end date from start date, -1 because present start day counted
                 stop_time = start_time + target - 1;
                 //cout<<"Start time = "<<start_time<<" Stop time = "<<stop_time<<endl;
                 // Increment executed time , since current day when building starts is counted.
                 curr->get_building()->executed_time += 1;
+                // If the building finishes the day it was started
+                if(curr->get_building()->get_executed_time() == curr->get_building()->get_total_time())
+                    {
+                        // execution for the buildng complete remove it from RBT
+                        /*cout<<"\n"<<days_timer<<": _______________ Completed buildin _______________"<<endl;
+                        cout<<"("<<curr->get_building()->get_building_num()<<","<<days_timer<<")"<<endl;
+                        cout<<"\n___________________________________________________"<<endl;
+                        cout<<"_____________________________________________________\n\n"<<endl;*/
+                        building_finished = true;
+
+                    }
 
             }
             else
@@ -148,24 +159,20 @@ int execute_buildings()
                     if(curr->get_building()->get_executed_time() == curr->get_building()->get_total_time())
                     {
                         // execution for the buildng complete remove it from RBT
-                        cout<<"\n"<<days_timer<<": _______________ Completed buildin _______________"<<endl;
+                        /*cout<<"\n"<<days_timer<<": _______________ Completed buildin _______________"<<endl;
                         cout<<"("<<curr->get_building()->get_building_num()<<","<<days_timer<<")"<<endl;
                         cout<<"\n___________________________________________________"<<endl;
-                        cout<<"_____________________________________________________\n\n"<<endl;
+                        cout<<"_____________________________________________________\n\n"<<endl;*/
                         building_finished = true;
-                        /*
-                        op<<"\n"<<timer<<" : ("<<curr->get_building()->get_building_num()<<","<<timer<<")"<<endl;
-                        RBT.deleteNode(curr);
-                        completed_bldg_cnt ++;
-                        */
+
                     }
                     else
                     {
                         // Execution still remaining so put it back in min heap
                         // with the updated executed time
                         MH.insert_new(curr);
-                        cout<<"Updated exec time of building "<<curr->get_building()->get_building_num()
-                           <<"= "<<curr->get_building()->executed_time<<endl;
+                        //cout<<"Updated exec time of building "<<curr->get_building()->get_building_num()
+                          // <<"= "<<curr->get_building()->executed_time<<endl;
 
                         // Clearing up state variales for next execution instance
                         execution_on = false; // since one instance over
@@ -181,6 +188,7 @@ int execute_buildings()
                     // End date not reached continue execution
                     curr->get_building()->executed_time += 1;
                 }
+
             }
         }
 
@@ -190,13 +198,13 @@ serve_command:
 
         // Commmands in sorted order, so we just check first command.
         // If arrival time matches execute it
+        //cout<<"Cmd arrival time = "<<cmd_que.front().arrival_time<<"and timer = "<<days_timer<<endl;
         if(cmd_que.front().arrival_time == days_timer)
         {
             // Insert command
             if(cmd_que.front().cmd_type == INSERT)
             {
                 insert_new_building();
-                //cout<<"\n************ inserted a building ******"<<endl;
             }
             else
             {
@@ -213,7 +221,7 @@ serve_command:
         if(building_finished == true)
         {
             // Write into the output file
-            op<<days_timer<<" : ("<<curr->get_building()->get_building_num()<<","<<days_timer<<")"<<endl;
+            op<<"("<<curr->get_building()->get_building_num()<<","<<days_timer<<")"<<endl;
 
             // Delete Node
             RBT.delete_node(curr);
@@ -233,7 +241,7 @@ serve_command:
      days_timer ++;
 
     }
-    cout<<"------------- COMPLETED BUILDINGS = "<<completed_bldg_cnt<<endl;
+    //cout<<"------------- COMPLETED BUILDINGS = "<<completed_bldg_cnt<<endl;
     return 0;
 }
 
@@ -254,7 +262,7 @@ int input_read( char * file_name)
     COMMAND_TYPE cmd_type;
     int arg1 = INVALID_ARG, arg2 = INVALID_ARG;
 
-    cout<<"------- Before reading vector size = "<<cmd_que.size()<<endl;
+    //cout<<"------- Before reading vector size = "<<cmd_que.size()<<endl;
 
     while (getline(ip_file, line)) {
 
@@ -304,16 +312,16 @@ int input_read( char * file_name)
         cmd_que.push(command(atoi(arrival_time.c_str()), cmd_type, arg1, arg2));
     }
 
-    cout<<"-------------- Total buildings inserted = "<<tot_bldg_cnt<<endl;
+    /*cout<<"-------------- Total buildings inserted = "<<tot_bldg_cnt<<endl;
     cout<<"------------------------------------------------------------"<<endl;
-    cout<<"------------------------------------------------------------"<<endl;
+    cout<<"------------------------------------------------------------"<<endl;*/
 
     return 0;
 }
 
 int main(int argc, char * argv[])
 {
-    cout << "Program Started !" << endl;
+    //cout << "Program Started !" << endl;
     if(argc == 1)
     {
         cout<<"\n Please give file name\n"<<endl;
@@ -324,7 +332,7 @@ int main(int argc, char * argv[])
 
     execute_buildings();
 
-    cout <<"\nProgram Ended !"<<endl;
+    //cout <<"\nProgram Ended !"<<endl;
 
     return 0;
 }

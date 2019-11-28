@@ -33,20 +33,4 @@ Building::~Building()
     //desctructor
 }
 
-// return true if b1 < b2
-/*bool Building::compare_executed_time(Building * b1, Building * b2)
-{
-    if(b1->executed_time < b2->executed_time)
-    {
-        return true;
-    }
-    else if (b1->executed_time > b2->executed_time)
-    {
-        return false;
-    }
-    else if(b1->executed_time == b2->executed_time)
-    {
-        return (b1->building_num < b2->building_num)?true: false;
-    }
 
-}*/

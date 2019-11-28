@@ -41,11 +41,11 @@ class RBNode
         Building* get_building();
 
         /* Delete funs */
-        RBNode * get_uncle();
-        bool is_left_child();
-        RBNode * get_sibling();
-        void move_down(RBNode *nParent);
-        bool has_red_child();
+            RBNode * get_uncle();
+            bool is_left_child();
+            RBNode * get_sibling();
+            void move_down(RBNode *nParent);
+            bool has_red_child();
 
 };
 
@@ -70,7 +70,7 @@ class RBTree
         int compare_building_num(RBNode * r1, RBNode * r2);
         void level_order_aux(RBNode *root);
         void inorder_aux(RBNode *root);
-        std::string inorder_aux_range(RBNode *root, int b1, int b2);
+        std::string inorder_aux_range(RBNode *root, int start, int end);
 
         // delete functions
         void delete_val(int bldg_num);
@@ -84,8 +84,8 @@ class RBTree
         void del_left_rotate(RBNode *x);
         RBNode *search(int bldg);
 
-        void rotate_left(RBNode *&root, RBNode *&pt);
-        void rotate_right(RBNode *&root, RBNode *&pt);
+        //void rotate_left(RBNode *&root, RBNode *&pt);
+        //void rotate_right(RBNode *&root, RBNode *&pt);
         void fix_violation(RBNode *&root, RBNode *&node);
         RBNode* BST_Insert(RBNode* root, RBNode *node);
 

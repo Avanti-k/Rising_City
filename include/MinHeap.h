@@ -22,13 +22,13 @@ class MinHeap
         int insert_new(RBNode *);
         RBNode * remove_min();
         vector <RBNode *> min_heap;
+        void print_min_heap();
 
     private:
 
         void heapify_up(int index);
         void heapify_down(int index);
         void copy_last_to_top(int first, int last);
-        void print_min_heap();
 
 };
 

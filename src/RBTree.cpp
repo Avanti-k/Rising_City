@@ -177,9 +177,9 @@ string RBTree::inorder_aux_range(RBNode *root, int start, int end)
     ret.append(inorder_aux_range(root->left, start, end));
     if((root->get_building()->get_building_num() >= start) && (root->get_building()->get_building_num() <= end))
     {
-        cout<<",("<<root->get_building()->get_building_num()<<","
+        /*cout<<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
-                    <<root->get_building()->get_total_time()<<")";
+                    <<root->get_building()->get_total_time()<<")";*/
         std::stringstream s;
         s<<",("<<root->get_building()->get_building_num()<<","
                     <<root->get_building()->get_executed_time()<<","
@@ -203,7 +203,7 @@ void RBTree::level_order_aux(RBNode *root)
     while (!q.empty())
     {
         RBNode *temp = q.front();
-        cout << temp->get_building()->get_building_num() << "("<<temp->get_color()<<")  ";
+        //cout << temp->get_building()->get_building_num() << "("<<temp->get_color()<<")  ";
         q.pop();
 
         if (temp->get_left() != NULL)
@@ -214,54 +214,6 @@ void RBTree::level_order_aux(RBNode *root)
     }
 }
 
-/* Rotate left */
-void RBTree::rotate_left(RBNode *&root, RBNode *&node)
-{
-    RBNode *node_right = node->get_right();
-
-    node->right = node_right->get_left();
-
-    if (node->get_right() != NULL)
-        node->right->parent = node;
-
-    node_right->parent = node->get_parent();
-
-    if (node->get_parent() == NULL)
-        root = node_right;
-
-    else if (node == node->get_parent()->get_left())
-        node->parent->left = node_right;
-
-    else
-        node->parent->right = node_right;
-
-    node_right->left = node;
-    node->parent = node_right;
-}
-/* Rotate right */
-void RBTree::rotate_right(RBNode *&root, RBNode *&node)
-{
-    RBNode *node_left = node->get_left();
-
-    node->left = node_left->get_right();
-
-    if (node->get_left() != NULL)
-        node->left->parent = node;
-
-    node_left->parent = node->get_parent();
-
-    if (node->get_parent() == NULL)
-        root = node_left;
-
-    else if (node == node->get_parent()->get_left())
-        node->parent->left = node_left;
-
-    else
-        node->parent->right = node_left;
-
-    node_left->right = node;
-    node->parent = node_left;
-}
 
 /* This function fixes violations caused by BST insertion */
 void RBTree::fix_violation(RBNode *&root, RBNode *&node)
@@ -301,7 +253,7 @@ void RBTree::fix_violation(RBNode *&root, RBNode *&node)
                    Left-rotation required */
                 if (node == parent_pt->get_right())
                 {
-                    rotate_left(root, parent_pt);
+                    del_left_rotate(parent_pt); //AK
                     node = parent_pt;
                     parent_pt = node->get_parent();
                 }
@@ -309,7 +261,8 @@ void RBTree::fix_violation(RBNode *&root, RBNode *&node)
                 /* Case : 3
                    pt is left child of its parent
                    Right-rotation required */
-                rotate_right(root, grand_parent_pt);
+
+                del_right_rotate(grand_parent_pt);
                 swap(parent_pt->color, grand_parent_pt->color);
                 node = parent_pt;
             }
@@ -338,7 +291,7 @@ void RBTree::fix_violation(RBNode *&root, RBNode *&node)
                    Right-rotation required */
                 if (node == parent_pt->get_left())
                 {
-                    rotate_right(root, parent_pt);
+                    del_right_rotate(parent_pt);
                     node = parent_pt;
                     parent_pt = node->get_parent();
                 }
@@ -346,7 +299,7 @@ void RBTree::fix_violation(RBNode *&root, RBNode *&node)
                 /* Case : 3
                    pt is right child of its parent
                    Left-rotation required */
-                rotate_left(root, grand_parent_pt);
+                del_left_rotate(grand_parent_pt);
                 swap(parent_pt->color, grand_parent_pt->color);
                 node = parent_pt;
             }
@@ -482,22 +435,6 @@ void RBTree:: RBTree_insert(RBNode * node)
     values_flip(replacement_node, node);
     delete_node(node); // since node is now at leaf node because actual memory address is to be deleted not just value
     //deleteNode(replacement_node);
-  }
-
- /* deletes the node with given value*/
-  void RBTree::delete_val(int bldg_num) {
-    if (RBRoot == NULL)
-      // Tree is empty
-      return;
-
-    RBNode *v = search(bldg_num);
-
-    if (v->get_building()->building_num != bldg_num) {
-      cout << "No node found to delete with value:" << bldg_num << endl;
-      return;
-    }
-
-    delete_node(v);
   }
 
    /*searches for given value
@@ -820,32 +757,33 @@ void RBTree:: RBTree_insert(RBNode * node)
   /* Prints and writed in file Building with id passed as argument */
   void RBTree :: print_single_building(int bldg_id)
   {
-        cout<<"________________________________________________________"<<endl;
+        //cout<<"________________________________________________________"<<endl;
         if(RBRoot == NULL)
         {
-            cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
+            //cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
+            op<<"(0,0,0)"<<endl;
             return;
         }
         RBNode * ret = search(bldg_id);
         // If no matching BID is found prints (0,0,0)
         if(ret->get_building()->get_building_num() != bldg_id)
         {
-            cout<<"\n Print Error : Cannot find Building : "<<bldg_id<<endl;
-            cout<<"(0,0,0)"<<endl;
-            op<<days_timer<<" : (0,0,0)"<<endl;
+            //cout<<"\n Print Error : Cannot find Building : "<<bldg_id<<endl;
+            //cout<<"(0,0,0)"<<endl;
+            op<<"(0,0,0)"<<endl;
         }
         else
         {
-            cout<<"\n"<<days_timer<<": _________ Print single building cmd ______________"<<endl;
+           /* cout<<"\n"<<days_timer<<": _________ Print single building cmd ______________"<<endl;
             cout<<"\n("<<ret->get_building()->get_building_num()<<","
                     <<ret->get_building()->get_executed_time()<<","
-                    <<ret->get_building()->get_total_time()<<")"<<endl;
-            op<<days_timer<<" : ("<<ret->get_building()->get_building_num()<<","
+                    <<ret->get_building()->get_total_time()<<")"<<endl;*/
+            op<<"("<<ret->get_building()->get_building_num()<<","
                     <<ret->get_building()->get_executed_time()<<","
                     <<ret->get_building()->get_total_time()<<")"<<endl;
 
         }
-        cout<<"________________________________________________________\n\n"<<endl;
+        //cout<<"________________________________________________________\n\n"<<endl;
 
   }
 
@@ -853,25 +791,26 @@ void RBTree:: RBTree_insert(RBNode * node)
   void RBTree :: print_building_range(int start, int end)
   {
         string to_write; // String to be written to the file
-        cout<<"\n"<<days_timer<<":________________________________________________________"<<endl;
-        cout<<"\n Inside print range building for "<<start<<" and "<<end<<endl;
+        //cout<<"\n"<<days_timer<<":________________________________________________________"<<endl;
+        //cout<<"\n Inside print range building for "<<start<<" and "<<end<<endl;
         if(RBRoot == NULL)
         {
-            cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
+            //cout<<"\nERROR : Cannot print RBTree is empty"<<endl;
+            op<<"(0,0,0)"<<endl;
             return;
         }
         string ret = this->inorder_aux_range(this->RBRoot, start, end);
         if(ret.length() == 0)// if no building found in given range
         {
             to_write = "(0,0,0)";
-            cout<<"\n NO building found in this range\n"<<endl;
+            //cout<<"\n NO building found in this range\n"<<endl;
         }
         else
         {
             to_write = ret.substr(START_POS, ret.length()); // to remove initial extra comma
         }
-        op<<days_timer<<" : "<<to_write<<endl; // to print on next line
+        op<<to_write<<endl; // to print on next line
 
-        cout<<"\n________________________________________________________\n\n"<<endl;
+        //cout<<"\n________________________________________________________\n\n"<<endl;
 
   }
