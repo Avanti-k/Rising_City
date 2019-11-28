@@ -4,15 +4,17 @@
 using namespace std;
 MinHeap::MinHeap()
 {
-    //ctor
+    //constructor
 }
 
 MinHeap::~MinHeap()
 {
-    //dtor
+    //destructtor
 }
 
-/* Heapify up */
+
+/* Heapify up
+ * when you insert new element and last then check if it has to go up*/
 
 void MinHeap::heapify_up(int index)
 {
@@ -30,7 +32,12 @@ void MinHeap::heapify_up(int index)
     }
 }
 
-/* Heapify down */
+
+
+/* Heapify down
+ * when you do remove min, replace it with last element and delete last
+ * the new top i.e first might be larger so heapify downwards */
+
 void MinHeap::heapify_down(int index)
 {
     int length = min_heap.size();
@@ -40,7 +47,7 @@ void MinHeap::heapify_down(int index)
     if(left_child >= length)
         return; //index is a leaf
 
-    int smallest = index;
+    int smallest = index; // maintains index of smallest value node
     int ret = RBTree::compare_executed_time(min_heap[left_child], min_heap[smallest]);
 
     if(ret == SMALLER)
@@ -65,17 +72,23 @@ void MinHeap::heapify_down(int index)
 
 }
 
-/* copies last element to top. Used internally by remove_min */
+
+/* Copies last element to top. Used internally by remove_min */
+
 void MinHeap::copy_last_to_top(int first, int last)
 {
     min_heap[first] = min_heap[last]; // copies last element to first index
     min_heap.pop_back(); // delete the last element
 }
 
-/* inserts new building node in minheap
-* return type 0 - if error like capaicuty full
-*             1 - success */
-int MinHeap::insert_new(RBNode * b)
+
+/* Inserts new building node in minheap.
+ * inserts new node at end and then
+ * call heapify_up to adjust heap property
+ * return type 0 - if error like capaicuty full
+ *             1 - success */
+
+int MinHeap::insert_new(RBNode * node)
 {
 
     int new_index = min_heap.size();
@@ -88,20 +101,21 @@ int MinHeap::insert_new(RBNode * b)
     }
 
     // always insert at last
-    //min_heap[new_index] = &temp;
-    min_heap.push_back(b);
+    // min_heap[new_index] = &temp;
+    min_heap.push_back(node);
 
     // might disturb the heap property of heapify up
     // starting from index = length
     heapify_up(new_index);
 
-    //cout<<"insert new inside";
     print_min_heap();
     return SUCCESS;
 }
 
-/* remove min i.e top element
-* and then replace last element with first and remove back*/
+
+
+ /* Remove min - pop topmost node and return it
+    It will replace last element with node and then do heapify_down*/
 
 RBNode * MinHeap::remove_min()
 {
@@ -123,6 +137,7 @@ RBNode * MinHeap::remove_min()
     return ret_node;
 }
 
+/* Function to print heap while testing*/
 void MinHeap::print_min_heap()
 {
     int len = min_heap.size();

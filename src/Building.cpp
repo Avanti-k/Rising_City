@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-/* Parameterised constructor */
+/* Parameterised constructor with default executed time value*/
 Building::Building(int building_num, int total_time, int executed_time)
 {
     this->building_num = building_num;
@@ -30,11 +30,11 @@ int Building::get_total_time()
 
 Building::~Building()
 {
-    //dtor
+    //desctructor
 }
 
 // return true if b1 < b2
-bool Building::compare_executed_time(Building * b1, Building * b2)
+/*bool Building::compare_executed_time(Building * b1, Building * b2)
 {
     if(b1->executed_time < b2->executed_time)
     {
@@ -49,4 +49,4 @@ bool Building::compare_executed_time(Building * b1, Building * b2)
         return (b1->building_num < b2->building_num)?true: false;
     }
 
-}
+}*/
