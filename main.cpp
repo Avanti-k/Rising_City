@@ -80,7 +80,7 @@ int execute_buildings()
 {
     //cout<<"\n--------------------- EXECUTE Buildings called -------------------"<<endl;
     // Open Output file
-    op.open("../output_file.txt");
+    op.open("output_file.txt");
     // Execution on - keeps track if any building is under execution or not
     // Building finished - Flag used to check if building has reached it's completion.
     bool execution_on = false, building_finished = false;
